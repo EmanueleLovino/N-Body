@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include directory
 include_directories(${CMAKE_SOURCE_DIR}/include)
+add_subdirectory(tests)
 
 # Add an example executable
 add_executable(test_main src/main.cpp)

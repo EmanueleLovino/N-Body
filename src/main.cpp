@@ -1,8 +1,20 @@
-#include "static_array.hpp"
+#include <cassert>
 #include <iostream>
+#include <vector>
+
+#include "Bodies.hpp"
 
 int main() {
-  auto a = nbody::make_static_array<int, 6>({1, 2, 3, 4, 5});
-  for (auto x : a)
-    std::cout << x << ' ';
+    nbody::Bodies<std::vector, float, nbody::SoATag> universe;
+    universe.addParticle(2, 3, 4, 5, 6, 7, 7, 8, 8, 10, 11);
+
+    nbody::Bodies<std::vector, float, nbody::AoSTag> universe_2;
+    universe_2.reserve(100);
+    universe_2.addParticle(2, 3, 4, 5, 6, 7, 7, 8, 8, 10, 11);
+
+    universe.addParticle(2, 3, 4, 5, 6, 7, 7, 8, 8, 10, 11);
+
+    assert(universe_2.size() == 1);
+
+    assert(universe.size() == 2);
 }

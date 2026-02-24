@@ -1,7 +1,10 @@
 #include "Concepts.hpp"
+#include <algorithm>
 #include <cstddef>
 #include <initializer_list>
 #include <ranges>
+
+#pragma once
 
 namespace nbody {
 
@@ -43,9 +46,9 @@ private:
  */
 template <static_array_t T, std::size_t N>
 constexpr static_array<T, N> make_static_array(std::initializer_list<T> list) {
-  if (list.size() != N) {
+  /*if (list.size() != N) {
     throw std::length_error("make_static_array: wrong number of elements");
-  }
+  }*/
   static_array<T, N> a{};
   std::ranges::copy(list, a.begin());
   return a;

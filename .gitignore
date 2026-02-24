@@ -1,24 +1,3 @@
-# Build directory
 build/
-
-# CMake generated files
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-Makefile
-compile_commands.json
-
-# macOS
-.DS_Store
-
-# Editors
 .cache/
-.vscode/
-.idea/
-
-# Binaries / objects
-*.o
-*.out
-*.a
-*.dylib
-
+.cache/

@@ -1,0 +1,11 @@
+add_executable(test_bodies test_bodies.cpp)
+
+target_link_libraries(test_bodies PRIVATE
+    Catch2::Catch2WithMain
+)
+
+target_include_directories(test_bodies PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+catch_discover_tests(test_bodies)
