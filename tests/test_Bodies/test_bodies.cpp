@@ -11,20 +11,22 @@ using SoABodies = nbody::Bodies<std::vector, float, nbody::SoATag>;
 using AoSBodies = nbody::Bodies<std::vector, float, nbody::SoATag>;
 
 // verifying that the compile-time dispatch through Tags work as intended
-//
+
 // SoATag to SoAData
 static_assert(
     std::same_as<nbody::StorageTraits<nbody::SoATag, std::vector, float>::type,
                  nbody::detail::SoAData<std::vector, float>>);
+
+// AoSTag to AoSData
+static_assert(
+    std::same_as<nbody::StorageTraits<nbody::AoSTag, std::vector, float>::type,
+                 nbody::detail::AoSData<std::vector, float>>);
+
 /*
  * Using the Catch2 unit test framework, in particular the TEMPLATE_TEST_CASE
  * feature permits us to extend the testing to different memory layouts without
  * adding eccessive boilerplate
  */
-// AoSTag to AoSData
-static_assert(
-    std::same_as<nbody::StorageTraits<nbody::AoSTag, std::vector, float>::type,
-                 nbody::detail::AoSData<std::vector, float>>);
 
 // construction
 TEMPLATE_TEST_CASE("default constructed object should have size 0", "[Bodies]",
