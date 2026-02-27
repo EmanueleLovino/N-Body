@@ -4,8 +4,16 @@
 #include <span>
 
 namespace nbody {
-namespace detail {
+/// @brief struct of a single particle
+template <Scalar T> struct Particle {
+    T qx, qy, qz;
+    T vx, vy, vz;
+    T ax, ay, az;
+    T m;
+    T r;
+};
 
+namespace detail {
 /// @brief non-owning view of a Particle
 template <Scalar T> struct ParticleView {
     T& qx;
@@ -61,28 +69,29 @@ template <typename Container> struct Iterator_particles {
 
 template <template <typename...> class Container, Scalar T = float>
 class AoS_particles {
-  public:
+
     using size_type = std::size_t;
     using value_type = T;
 
+  private:
+    /// @brief underlying container of particles, forming an Array of Struct
+    Container<Particle<T>> data_;
+
+  public:
+    /// @brief API method to add a full particle, taken by value. Redirects on
+    /// the Container push_back fn.
+    /// @requires a Particle p
+    void add_particle(Particle<T> p) { data_.push_back(std::move(p)); }
+
+    /// @brief simple reserve API that redirects to the underlying container
+    /// @params n, number of Particles which must be allocated
+    ///
+    void reserve(size_type n) { data_.reserve(n); }
     /// Ranges interface
     [[nodiscard]] auto begin() { return data_.begin(); }
     [[nodiscard]] auto end() { return data_.end(); }
     /// size getter, redirects to the underlying container
     [[nodiscard]] size_type size() const { return data_.size(); }
-
-  private:
-    /// @brief struct of a single particle
-    struct Particle {
-        T qx, qy, qz;
-        T vx, vy, vz;
-        T ax, ay, az;
-        T m;
-        T r;
-    };
-
-    /// @brief underlying container of particles, forming an Array of Struct
-    Container<Particle> data_;
 };
 
 /// @brief class that organizes particles in a Struct of Array layout
@@ -92,6 +101,7 @@ class AoS_particles {
 
 template <template <typename...> class Container, Scalar T = float>
 class SoA_particles {
+
     using iterator = detail::Iterator_particles<SoA_particles>;
     using value_type = T;
     using size_type = std::size_t;
@@ -104,6 +114,43 @@ class SoA_particles {
     Container<T> r;
 
   public:
+    /// @brief method to add a particle, must scatter all the params to the
+    /// underlying container
+    /// @params Particle struct
+    void add_particle(Particle<T> p) {
+        qx.push_back(p.qx);
+        qy.push_back(p.qy);
+        qz.push_back(p.qz);
+
+        vx.push_back(p.vx);
+        vy.push_back(p.vy);
+        vz.push_back(p.vz);
+
+        ax.push_back(p.ax);
+        ay.push_back(p.ay);
+        az.push_back(p.az);
+
+        m.push_back(p.m);
+        r.push_back(p.r);
+    }
+
+    /// @brief useful method to reserve up to n elements per Container,
+    /// redirecting the request to each
+    /// @params n, number of Particles which will be allocated
+    void reserve(size_type n) {
+        qx.reserve(n);
+        qy.reserve(n);
+        qz.reserve(n);
+        vx.reserve(n);
+        vy.reserve(n);
+        vz.reserve(n);
+        ax.reserve(n);
+        ay.reserve(n);
+        az.reserve(n);
+        m.reserve(n);
+        r.reserve(n);
+    }
+
     /// Ranges interface
     [[nodiscard]] auto begin() { return iterator{this, 0}; }
     [[nodiscard]] auto end() { return iterator{this, qx.size()}; }
