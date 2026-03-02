@@ -3,7 +3,6 @@
 #include "detail/iterator_particles.hpp"
 #include "detail/particle_view.hpp"
 #include <cstddef>
-#include <iterator>
 
 namespace nbody {
 /// @brief struct of a single particle
@@ -15,41 +14,9 @@ template <Scalar T> struct Particle {
     T r;
 };
 
-/// @brief forward iterator used in the SoA implementation
-template <typename Storage> struct Iterator_particles {
-    using iterator_category = std::forward_iterator_tag;
-    using size_type = std::size_t;
-
-    explicit Iterator_particles(Storage* storage, size_type index)
-        : storage_(storage), i(index) {};
-
-    /// @brief deferencing operator for the iterator
-    /// @requires Container to implement a method that returns the view of a
-    /// particle
-    /// @ returns a particle view over the i-th element of the container
-    auto operator*() { return storage_->view(i); }
-
-    Iterator_particles& operator++() noexcept {
-        ++i;
-        return *this;
-    }
-
-    bool operator==(const Iterator_particles& other) const noexcept {
-        return i == other.i;
-    }
-
-    bool operator!=(const Iterator_particles& other) const noexcept {
-        return i != other.i;
-    }
-
-  private:
-    Storage* storage_{nullptr};
-    size_type i{};
-};
-
 /// @brief class that organizes particles in a Array of Struct layout
 /// @tparam Container: underlying container type, must store elements in a
-/// contiguous way in memory (TODO: add a concept)
+/// contiguous way in memory
 /// @tparam T: must be a scalar, respecting the Scalar concept
 
 template <template <typename...> class Container, Scalar T = float>
@@ -82,10 +49,11 @@ class AoS_particles {
 
 /// @brief class that organizes particles in a Struct of Array layout
 /// @tparam Container: underlying container type, must store elements in a
-/// contiguous way in memory (TODO: add a concept)
+/// contiguous way in memory
 /// @tparam T: must be a scalar, respecting the Scalar concept
 
 template <template <typename...> class Container, Scalar T = float>
+    requires Particles_container<Container<Particle<T>>>
 class SoA_particles {
 
     using iterator = detail::Iterator_particles<SoA_particles>;
@@ -152,5 +120,25 @@ class SoA_particles {
     /// we can only add a full formed particle
     [[nodiscard]] size_type size() { return qx.size(); }
 };
+
+/// Type alias with implementing a small compile time dipatching through tags to
+/// have a better readability and usage
+
+template <template <typename...> class Container, Scalar T, typename Layout>
+struct Storage;
+
+template <template <typename...> class Container, Scalar T>
+struct Storage<Container, T, AoS> {
+    using type = nbody::AoS_particles<Container, T>;
+};
+
+template <template <typename...> class Container, Scalar T>
+struct Storage<Container, T, SoA> {
+    using type = nbody::SoA_particles<Container, T>;
+};
+
+template <template <typename...> class Container, Scalar T, typename Layout>
+    requires Particles_container<Container<Particle<T>>>
+using System = Storage<Container, T, Layout>::type;
 
 } // namespace nbody
