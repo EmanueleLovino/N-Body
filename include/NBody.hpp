@@ -4,18 +4,26 @@
 
 namespace nbody {
 
-template <typename System> class Nbody {
-    using size_type = std::size_t;
+template <typename System, typename Integrator> class Nbody {
 
   public:
-    explicit Nbody(System&& system) : system_(std::move(system)) {};
+    using size_type = std::size_t;
 
-    [[nodiscard]] size_type size() { return system_.size(); }
+    explicit Nbody(System&& system, Integrator&& integrator)
+        : system_(std::move(system)), integrator_(integrator) {}
 
+    [[nodiscard]] size_type size() const { return system_.size(); }
+
+    /// introduced for testing purposes
     System& get() { return system_; }
 
   private:
     System system_;
+    Integrator integrator_;
 };
 
+/// needed for CTAD: class template auto deduction, used in test_system (move
+/// semantics)
+template <typename System, typename Integrator>
+Nbody(System&&, Integrator) -> Nbody<System, Integrator>;
 } // namespace nbody
