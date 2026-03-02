@@ -1,7 +1,8 @@
-#include "Particles.hpp"
-#include "Storage.hpp"
+#include "particles.hpp"
+#include "system.hpp"
 #include <cassert>
 #include <iostream>
+#include <list>
 #include <vector>
 int main() {
     nbody::System<std::vector, float, AoS> new_universe;

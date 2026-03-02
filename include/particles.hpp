@@ -1,7 +1,9 @@
 #pragma once
-#include "Concepts.hpp"
+#include "concepts.hpp"
+#include "detail/iterator_particles.hpp"
+#include "detail/particle_view.hpp"
 #include <cstddef>
-#include <span>
+#include <iterator>
 
 namespace nbody {
 /// @brief struct of a single particle
@@ -13,54 +15,37 @@ template <Scalar T> struct Particle {
     T r;
 };
 
-namespace detail {
-/// @brief non-owning view of a Particle
-template <Scalar T> struct ParticleView {
-    T& qx;
-    T& qy;
-    T& qz;
-    T& vx;
-    T& vy;
-    T& vz;
-    T& ax;
-    T& ay;
-    T& az;
-    T& m;
-    T& r;
-};
-
 /// @brief forward iterator used in the SoA implementation
-template <typename Container> struct Iterator_particles {
+template <typename Storage> struct Iterator_particles {
     using iterator_category = std::forward_iterator_tag;
     using size_type = std::size_t;
 
-    explicit Iterator_particles(Container* container, size_type index)
-        : container_(container), i(index) {};
+    explicit Iterator_particles(Storage* storage, size_type index)
+        : storage_(storage), i(index) {};
 
     /// @brief deferencing operator for the iterator
     /// @requires Container to implement a method that returns the view of a
     /// particle
     /// @ returns a particle view over the i-th element of the container
-    auto operator*() { return container_->view(i); }
+    auto operator*() { return storage_->view(i); }
 
-    Iterator_particles& operator++() {
+    Iterator_particles& operator++() noexcept {
         ++i;
         return *this;
     }
 
-    bool operator==(const Iterator_particles& other) const {
+    bool operator==(const Iterator_particles& other) const noexcept {
         return i == other.i;
     }
 
-    bool operator!=(const Iterator_particles& other) const {
+    bool operator!=(const Iterator_particles& other) const noexcept {
         return i != other.i;
     }
 
   private:
-    Container* container_{nullptr};
+    Storage* storage_{nullptr};
     size_type i{};
 };
-} // namespace detail
 
 /// @brief class that organizes particles in a Array of Struct layout
 /// @tparam Container: underlying container type, must store elements in a
@@ -68,6 +53,7 @@ template <typename Container> struct Iterator_particles {
 /// @tparam T: must be a scalar, respecting the Scalar concept
 
 template <template <typename...> class Container, Scalar T = float>
+    requires Particles_container<Container<Particle<T>>>
 class AoS_particles {
 
     using size_type = std::size_t;
