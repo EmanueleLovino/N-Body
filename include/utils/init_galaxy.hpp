@@ -2,7 +2,7 @@
 #include <cmath>
 #include <random>
 
-namespace nbody {
+namespace nbody::utils {
 /// @brief random initalization method for the whole system
 /// @tparams system to initialize
 /// @param number of particles of the whole simulation,
@@ -47,4 +47,4 @@ void init_galaxy(System& system, int nParticles, unsigned long seed = 24) {
         system.add_particle({qx, qy, qz, vx, vy, vz, 0.0f, 0.0f, 0.0f, m, r});
     };
 };
-} // namespace nbody
+} // namespace nbody::utils
