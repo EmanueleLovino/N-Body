@@ -1,4 +1,4 @@
-#include "NBody.hpp"
+#include "nbody.hpp"
 #include "particles.hpp"
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_template_test_macros.hpp>
@@ -20,7 +20,7 @@ TEMPLATE_TEST_CASE("move semantics in Nbody class works as intended", "[Nbody]",
     s.add_particle(p);
     s.add_particle(p);
 
-    nbody::Nbody universe(std::move(s), [](auto& h, float dt) {});
+    nbody::Nbody universe(std::move(s), [](auto& h, float dt) {}, 100);
 
     REQUIRE(s.size() == 0);
     /// moved on type as the same data as the moved from type

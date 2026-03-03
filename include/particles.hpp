@@ -23,14 +23,14 @@ template <template <typename...> class Container, Scalar T = float>
     requires Particles_container<Container<Particle<T>>>
 class AoS_particles {
 
-    using size_type = std::size_t;
-    using value_type = T;
-
   private:
     /// @brief underlying container of particles, forming an Array of Struct
     Container<Particle<T>> data_;
 
   public:
+    using size_type = std::size_t;
+    using value_type = T;
+
     /// @brief API method to add a full particle, taken by value. Redirects on
     /// the Container push_back fn.
     /// @requires a Particle p
@@ -56,10 +56,6 @@ template <template <typename...> class Container, Scalar T = float>
     requires Particles_container<Container<Particle<T>>>
 class SoA_particles {
 
-    using iterator = detail::Iterator_particles<SoA_particles>;
-    using value_type = T;
-    using size_type = std::size_t;
-
   private:
     Container<T> qx, qy, qz;
     Container<T> vx, vy, vz;
@@ -68,6 +64,10 @@ class SoA_particles {
     Container<T> r;
 
   public:
+    using iterator = detail::Iterator_particles<SoA_particles>;
+    using value_type = T;
+    using size_type = std::size_t;
+
     /// @brief method to add a particle, must scatter all the params to the
     /// underlying container
     /// @params Particle struct

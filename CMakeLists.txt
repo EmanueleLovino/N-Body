@@ -4,7 +4,18 @@ project(nbody LANGUAGES CXX)
 # Use C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS OFF
+
+target_compile_options(your_target PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wshadow          # variable shadowing
+    -Wconversion      # implicit conversions
+    -Wsign-conversion # signed/unsigned mismatch
+    -Wnull-dereference
+    -Wdouble-promotion # float implicitly promoted to double
+))
 
 # Generate compile_commands.json for LSP
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
