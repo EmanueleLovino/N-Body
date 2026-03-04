@@ -1,8 +1,9 @@
-#include "particles.hpp"
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <vector>
+
+#include "particles.hpp"
 
 /// useful aliases for better clarity during testing, tests can be later
 /// extended to other vector-like containers
@@ -51,7 +52,6 @@ TEMPLATE_TEST_CASE("Range-based for loops work as intended", "[System]",
 
     /// summing over a field
     for (auto&& p : s) {
-
         sum += p.qx;
     }
     REQUIRE(sum == 6);

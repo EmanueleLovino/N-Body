@@ -1,0 +1,11 @@
+CompileFlags:
+
+  CompilationDatabase: .
+  Add:
+    - "-I/home/emanuele/dev/N-Body/include"
+
+Index:
+  Background: Build
+
+If:
+  PathExclude: build/.*

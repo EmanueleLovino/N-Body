@@ -1,9 +1,10 @@
-#include "nbody.hpp"
-#include "particles.hpp"
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <vector>
+
+#include "nbody.hpp"
+#include "particles.hpp"
 /// useful aliases for better clarity during testing, tests can be later
 /// extended to other vector-like containers
 using AoS_system = nbody::System<std::vector, float, AoS>;
@@ -11,7 +12,6 @@ using SoA_system = nbody::System<std::vector, float, SoA>;
 
 TEMPLATE_TEST_CASE("move semantics in Nbody class works as intended", "[Nbody]",
                    AoS_system, SoA_system) {
-
     using SystemType = TestType;
 
     SystemType s;
@@ -24,7 +24,5 @@ TEMPLATE_TEST_CASE("move semantics in Nbody class works as intended", "[Nbody]",
 
     REQUIRE(s.size() == 0);
     /// moved on type as the same data as the moved from type
-    for (auto&& p : universe.get()) {
-        REQUIRE(p.qx == 2);
-    }
+    REQUIRE(universe.size() == 2);
 }

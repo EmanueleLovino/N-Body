@@ -9,7 +9,6 @@ namespace nbody::utils {
 /// @paramrandom seed used in the mt engine for random number generation
 template <typename System>
 void init_galaxy(System& system, int nParticles, unsigned long seed = 24) {
-
     using T = System::value_type;
 
     /// creation of a uniform distribution with the mt engine
@@ -26,7 +25,6 @@ void init_galaxy(System& system, int nParticles, unsigned long seed = 24) {
 
     /// add the rest of the particles up to nParticles
     for (auto i = 1; i < nParticles; ++i) {
-
         T m = dist(rng) * 5e20f;
         T r = m * 2.5e-15f;
 
@@ -47,4 +45,4 @@ void init_galaxy(System& system, int nParticles, unsigned long seed = 24) {
         system.add_particle({qx, qy, qz, vx, vy, vz, 0.0f, 0.0f, 0.0f, m, r});
     };
 };
-} // namespace nbody::utils
+}  // namespace nbody::utils

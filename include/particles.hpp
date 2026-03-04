@@ -1,12 +1,14 @@
 #pragma once
+#include <cstddef>
+
 #include "concepts.hpp"
 #include "detail/iterator_particles.hpp"
 #include "detail/particle_view.hpp"
-#include <cstddef>
 
 namespace nbody {
 /// @brief struct of a single particle
-template <Scalar T> struct Particle {
+template <Scalar T>
+struct Particle {
     T qx, qy, qz;
     T vx, vy, vz;
     T ax, ay, az;
@@ -22,12 +24,11 @@ template <Scalar T> struct Particle {
 template <template <typename...> class Container, Scalar T = float>
     requires Particles_container<Container<Particle<T>>>
 class AoS_particles {
-
-  private:
+   private:
     /// @brief underlying container of particles, forming an Array of Struct
     Container<Particle<T>> data_;
 
-  public:
+   public:
     using size_type = std::size_t;
     using value_type = T;
 
@@ -55,15 +56,14 @@ class AoS_particles {
 template <template <typename...> class Container, Scalar T = float>
     requires Particles_container<Container<Particle<T>>>
 class SoA_particles {
-
-  private:
+   private:
     Container<T> qx, qy, qz;
     Container<T> vx, vy, vz;
     Container<T> ax, ay, az;
     Container<T> m;
     Container<T> r;
 
-  public:
+   public:
     using iterator = detail::Iterator_particles<SoA_particles>;
     using value_type = T;
     using size_type = std::size_t;
@@ -118,7 +118,7 @@ class SoA_particles {
 
     /// safe to look at just one dimension as invariants will always hold since
     /// we can only add a full formed particle
-    [[nodiscard]] size_type size() { return qx.size(); }
+    [[nodiscard]] size_type size() const { return qx.size(); }
 };
 
 /// Type alias with implementing a small compile time dipatching through tags to
@@ -141,4 +141,4 @@ template <template <typename...> class Container, Scalar T, typename Layout>
     requires Particles_container<Container<Particle<T>>>
 using System = Storage<Container, T, Layout>::type;
 
-} // namespace nbody
+}  // namespace nbody

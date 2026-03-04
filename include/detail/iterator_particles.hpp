@@ -1,11 +1,13 @@
 #pragma once
-#include "../detail/particle_view.hpp"
 #include <cstddef>
 #include <iterator>
 
+#include "detail/particle_view.hpp"
+
 namespace nbody::detail {
 /// @brief forward iterator used in the SoA implementation
-template <typename Storage> struct Iterator_particles {
+template <typename Storage>
+struct Iterator_particles {
     /// all aliases required for iterator compatibility with STL
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -36,8 +38,8 @@ template <typename Storage> struct Iterator_particles {
         return i != other.i;
     }
 
-  private:
+   private:
     Storage* storage_{nullptr};
     size_type i{};
 };
-} // namespace nbody::detail
+}  // namespace nbody::detail

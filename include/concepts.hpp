@@ -19,3 +19,6 @@ concept is_layout_tag = std::same_as<Tag, AoS> || std::same_as<Tag, SoA>;
 /// container are store physically in a contiguous way, we also need random
 template <typename C>
 concept Particles_container = std::ranges::contiguous_range<C>;
+
+// (TODO) add a concept for System (like AoS particles and SoA particles
+// themselves) (TODO) add a concept for Integrator as well

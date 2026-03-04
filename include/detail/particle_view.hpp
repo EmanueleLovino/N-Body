@@ -1,10 +1,11 @@
 #pragma once
-#include "../concepts.hpp"
+#include "concepts.hpp"
 
 namespace nbody::detail {
 
 /// @brief non-owning view of a Particle
-template <Scalar T> struct ParticleView {
+template <Scalar T>
+struct ParticleView {
     T& qx;
     T& qy;
     T& qz;
@@ -17,4 +18,4 @@ template <Scalar T> struct ParticleView {
     T& m;
     T& r;
 };
-} // namespace nbody::detail
+}  // namespace nbody::detail
