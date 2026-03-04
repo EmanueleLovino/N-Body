@@ -1,2 +1,0 @@
--I/home/emanuele/dev/N-Body/include
--std=c++20
