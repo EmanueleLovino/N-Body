@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <utility>
 
+#include "utils/compute_energy.hpp"
+
 namespace nbody {
 
 template <typename System, typename Integrator>
@@ -17,6 +19,11 @@ class Nbody {
     [[nodiscard]] size_type size() const { return system_.size(); }
 
     void step(float dt) { integrator_(system_, dt); }
+
+    /// @brief computes total energy of the system
+    [[nodiscard]] auto energy() {
+        return nbody::utils::compute_energy(system_);
+    }
 
    private:
     System system_;
