@@ -4,6 +4,7 @@
 #include "constants.hpp"
 
 namespace nbody::physics {
+
 template <typename System>
 void compute_accelerations(System& system) {
     using T = typename System::value_type;

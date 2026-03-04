@@ -7,6 +7,7 @@
 #include "constants.hpp"
 #include "particles.hpp"
 #include "physics/compute_accelerations.hpp"
+#include "physics/updates.hpp"
 
 /// useful aliases for better clarity during testing, tests can be later
 /// extended to other vector-like containers
@@ -15,6 +16,7 @@ using SoA_system = nbody::System<std::vector, float, SoA>;
 
 /// tests for the utils directory free methods
 
+/// ==================== compute_accelerations tests ====================
 TEMPLATE_TEST_CASE("compute_accelerations", "[physics]", SoA_system,
                    AoS_system) {
     SECTION("two particles accelerate towards each other") {
@@ -64,4 +66,49 @@ TEMPLATE_TEST_CASE("compute_accelerations", "[physics]", SoA_system,
         auto p0 = *s.begin();
         REQUIRE(p0.ax == Catch::Approx(expected).epsilon(1e-5));
     }
+}
+
+/// ==================== update_velocities tests ====================
+
+TEMPLATE_TEST_CASE("update_velocities", "[physics]", SoA_system, AoS_system) {
+    TestType s;
+    // particle with known acceleration
+    s.add_particle({0, 0, 0, 0, 0, 0, 2, 4, 6, 1.0f, 0.1f});
+
+    nbody::physics::update_velocities(s, 1.0f);
+
+    auto p = *s.begin();
+    REQUIRE(p.vx == Catch::Approx(2.0f));
+    REQUIRE(p.vy == Catch::Approx(4.0f));
+    REQUIRE(p.vz == Catch::Approx(6.0f));
+}
+
+/// ==================== update_positions tests ====================
+TEMPLATE_TEST_CASE("update_positions", "[physics]", SoA_system, AoS_system) {
+    TestType s;
+    // particle with known velocity
+    s.add_particle({0, 0, 0, 3, 6, 9, 0, 0, 0, 1.0f, 0.1f});
+
+    nbody::physics::update_positions(s, 1.0f);
+
+    auto p = *s.begin();
+    REQUIRE(p.qx == Catch::Approx(3.0f));
+    REQUIRE(p.qy == Catch::Approx(6.0f));
+    REQUIRE(p.qz == Catch::Approx(9.0f));
+}
+
+/// ============ update_positions_and_velocities tests =============
+TEMPLATE_TEST_CASE("update_positions_and_velocities", "[physics]", SoA_system,
+                   AoS_system) {
+    TestType s;
+    // particle with known velocity and acceleration
+    s.add_particle({0, 0, 0, 1, 0, 0, 2, 0, 0, 1.0f, 0.1f});
+
+    nbody::physics::update_positions_and_velocities(s, 1.0f);
+
+    auto p = *s.begin();
+    // q = q + (v + 0.5 * a * dt) * dt = 0 + (1 + 0.5 * 2 * 1) * 1 = 2
+    REQUIRE(p.qx == Catch::Approx(2.0f));
+    // v = v + a * dt = 1 + 2 * 1 = 3
+    REQUIRE(p.vx == Catch::Approx(3.0f));
 }
