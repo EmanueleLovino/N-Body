@@ -19,7 +19,7 @@ auto compute_energy(System& system) {
 
     for (auto&& pi : system) {
         auto vel_squared = pi.vx * pi.vx + pi.vy * pi.vy + pi.vz * pi.vz;
-        kinetic += 0.5 * pi.m * vel_squared;
+        kinetic += 0.5f * pi.m * vel_squared;
 
         for (auto&& pj : system) {
             if (&pi.qx == &pj.qx) continue;
@@ -32,6 +32,6 @@ auto compute_energy(System& system) {
             potential += -(G * pi.m * pj.m) / dist;
         }
     }
-    return kinetic + 0.5 * potential;
+    return kinetic + 0.5f * potential;
 }
 }  // namespace nbody::utils
