@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Default to Release if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
 # Generate compile_commands.json for LSP
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -29,6 +34,7 @@ add_custom_target(copy_compile_commands ALL
     COMMENT "Copying compile_commands.json to project root"
 )
 
+
 # ---- Example executable ----
 add_executable(test_main src/main.cpp)
 target_include_directories(test_main PRIVATE
@@ -43,7 +49,15 @@ target_compile_options(test_main PRIVATE
     -Wsign-conversion
     -Wnull-dereference
     -Wdouble-promotion
+    # optimization flags
+    $<$<CONFIG:Release>:-O3>
+    $<$<CONFIG:Release>:-march=native>
+    $<$<CONFIG:Debug>:-O0>
+    $<$<CONFIG:Debug>:-g>
 )
+find_package(TBB REQUIRED)
+target_link_libraries(test_main PRIVATE TBB::tbb)
+
 
 # ---- Tests ----
 add_subdirectory(tests)

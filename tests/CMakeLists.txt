@@ -1,3 +1,4 @@
+find_package(TBB REQUIRED)
 add_executable(test_particles test_particles.cpp)
 add_executable(test_system test_system.cpp)
 add_executable(test_utils test_utils.cpp)
@@ -21,3 +22,10 @@ catch_discover_tests(test_system)
 catch_discover_tests(test_utils)
 catch_discover_tests(test_physics)
 catch_discover_tests(test_nbody)
+
+target_link_libraries(test_particles PRIVATE TBB::tbb)
+target_link_libraries(test_system    PRIVATE TBB::tbb)
+target_link_libraries(test_utils     PRIVATE TBB::tbb)
+target_link_libraries(test_physics   PRIVATE TBB::tbb)
+target_link_libraries(test_nbody   PRIVATE TBB::tbb)
+
