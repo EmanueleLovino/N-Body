@@ -51,7 +51,9 @@ target_compile_options(test_main PRIVATE
     -Wdouble-promotion
     # optimization flags
     $<$<CONFIG:Release>:-O3>
+    $<$<CONFIG:Release>:-w> 
     $<$<CONFIG:Release>:-march=native>
+    $<$<CONFIG:Release>:-funroll-loops>
     $<$<CONFIG:Debug>:-O0>
     $<$<CONFIG:Debug>:-g>
 )

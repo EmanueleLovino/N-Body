@@ -111,12 +111,16 @@ void run_simulation() {
     auto end_time = std::chrono::high_resolution_clock::now();
 
     auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-        end_time - start_time);
+                            end_time - start_time)
+                            .count();
+
+    auto fps = NIterations * 1000 / elapsed_time;
 
     double e_final = sim.energy();
     double drift = std::abs(e_final - e_initial) / std::abs(e_initial) * 100.0;
     std::cout << "\nSimulation ended.\n\n"
               << "Simulation time:  " << elapsed_time << " ms\n"
+              << "Iterations/s:  " << fps << "\n"
               << "Final energy:  " << e_final << "\n"
               << "Energy drift:  " << drift << "%\n";
 }
