@@ -2,12 +2,15 @@
 #include <cmath>
 #include <random>
 
+#include "concepts.hpp"
+
 namespace nbody::utils {
 /// @brief random initalization method for the whole system
 /// @tparams system to initialize
 /// @param number of particles of the whole simulation,
 /// @paramrandom seed used in the mt engine for random number generation
 template <typename System>
+    requires particles_system<System>
 void init_galaxy(System& system, int nParticles, unsigned long seed = 24) {
     using T = System::value_type;
 

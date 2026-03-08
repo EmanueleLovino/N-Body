@@ -6,6 +6,7 @@
 #include <cmath>
 #include <execution>
 
+#include "concepts.hpp"
 #include "constants.hpp"
 
 namespace nbody::physics {
@@ -17,6 +18,7 @@ constexpr __always_inline auto fast_rsqrt(float x) -> float;
 /// synchronize threads
 /// @tparams a system of particles
 template <typename System>
+    requires particles_system<System>
 void compute_accelerations(System& system) {
     using T = typename System::value_type;
     /// constants needeed

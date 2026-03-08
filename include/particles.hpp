@@ -22,7 +22,7 @@ struct Particle {
 /// @tparam T: must be a scalar, respecting the Scalar concept
 
 template <template <typename...> class Container, Scalar T = float>
-    requires Particles_container<Container<Particle<T>>>
+    requires particles_container<Container<Particle<T>>>
 class AoS_particles {
    private:
     /// @brief underlying container of particles, forming an Array of Struct
@@ -54,7 +54,7 @@ class AoS_particles {
 /// @tparam T: must be a scalar, respecting the Scalar concept
 
 template <template <typename...> class Container, Scalar T = float>
-    requires Particles_container<Container<Particle<T>>>
+    requires particles_container<Container<Particle<T>>>
 class SoA_particles {
    private:
     Container<T> qx, qy, qz;
@@ -122,7 +122,7 @@ class SoA_particles {
 };
 
 /// Type alias with implementing a small compile time dipatching through tags to
-/// have a better readability and usage
+/// have better readability and easier usage
 
 template <template <typename...> class Container, Scalar T, typename Layout>
 struct Storage;
@@ -138,7 +138,7 @@ struct Storage<Container, T, SoA> {
 };
 
 template <template <typename...> class Container, Scalar T, typename Layout>
-    requires Particles_container<Container<Particle<T>>>
+    requires particles_container<Container<Particle<T>>>
 using System = Storage<Container, T, Layout>::type;
 
 }  // namespace nbody

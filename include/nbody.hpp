@@ -2,11 +2,13 @@
 #include <cstddef>
 #include <utility>
 
+#include "concepts.hpp"
 #include "utils/compute_energy.hpp"
 
 namespace nbody {
 
 template <typename System, typename Integrator>
+    requires particles_system<System>
 class Nbody {
    public:
     using size_type = std::size_t;

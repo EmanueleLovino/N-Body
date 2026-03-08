@@ -1,4 +1,5 @@
 #pragma once
+#include "concepts.hpp"
 namespace nbody::physics {
 
 /// @brief updates velocities from accelerations: v += a * dt
@@ -6,6 +7,7 @@ namespace nbody::physics {
 /// @param system the particle system to update
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void update_velocities(System& system, float dt) {
     using T = typename System::value_type;
 
@@ -23,6 +25,7 @@ void update_velocities(System& system, float dt) {
 /// @param system the particle system to update
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void update_positions(System& system, float dt) {
     using T = typename System::value_type;
 
@@ -40,6 +43,7 @@ void update_positions(System& system, float dt) {
 /// @param system the particle system to update
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void update_positions_and_velocities(System& system, float dt) {
     using T = typename System::value_type;
 

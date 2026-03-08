@@ -12,6 +12,7 @@ namespace nbody::integrators {
 /// @param system the particle system
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void euler(System& system, float dt) {
     physics::compute_accelerations(system);
     physics::update_velocities(system, dt);
@@ -22,6 +23,7 @@ void euler(System& system, float dt) {
 /// @param system the particle system
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void verlet(System& system, float dt) {
     physics::compute_accelerations(system);
     physics::update_positions_and_velocities(system, dt);
@@ -31,6 +33,7 @@ void verlet(System& system, float dt) {
 /// @param system the particle system
 /// @param dt timestep
 template <typename System>
+    requires particles_system<System>
 void leapfrog(System& system, float dt) {
     physics::update_velocities(system, dt * 0.5f);
     physics::update_positions(system, dt);
