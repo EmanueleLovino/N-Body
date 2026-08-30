@@ -9,6 +9,7 @@
 #include "particles.hpp"
 #include "utils/init_galaxy.hpp"
 
+namespace {
 // default values
 std::size_t NParticles = 1000;
 unsigned long NIterations = 1000;
@@ -124,7 +125,7 @@ void run_simulation() {
               << "Final energy:  " << e_final << "\n"
               << "Energy drift:  " << drift << "%\n";
 }
-
+}
 int main(int argc, char** argv) {
     parse_args(argc, argv);
 

@@ -14,6 +14,16 @@ endif()
 # Generate compile_commands.json for LSP
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# macOS Clang defaults to libc++, which gates the parallel STL execution
+# policies (std::execution::par_unseq) behind this flag. Linux Clang defaults to
+# libstdc++, which ships them natively (backed by TBB below) and does not need it.
+if(APPLE)
+    add_compile_options(-fexperimental-library)
+    # Same flag at link time pulls in libc++experimental, which holds the
+    # libdispatch PSTL backend (std::__pstl::__libdispatch::*).
+    add_link_options(-fexperimental-library)
+endif()
+
 # ---- Fetch Catch2 ----
 include(FetchContent)
 FetchContent_Declare(

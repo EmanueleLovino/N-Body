@@ -1,9 +1,6 @@
 #pragma once
-#include <sys/cdefs.h>
-
 #include <algorithm>
 #include <bit>
-#include <cmath>
 #include <execution>
 
 #include "concepts.hpp"
@@ -11,7 +8,7 @@
 
 namespace nbody::physics {
 
-constexpr __always_inline auto fast_rsqrt(float x) -> float;
+[[gnu::always_inline]] constexpr auto fast_rsqrt(float x) -> float;
 /// @brief free method to compute the acceleration of each particle. The method
 /// is parallelized with C++ std::for_each, taking parallel unseq as execution
 /// policy (as the method is embarassingly parallel, there is no need to
@@ -59,7 +56,7 @@ void compute_accelerations(System& system) {
                   });
 }
 
-constexpr __always_inline auto fast_rsqrt(float x) -> float {
+[[gnu::always_inline]] constexpr auto fast_rsqrt(float x) -> float {
     const float x2 = x * 0.5f;
     auto i = std::bit_cast<std::int32_t>(x);
     i = 0x5f3759df - (i >> 1);

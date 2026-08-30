@@ -15,11 +15,13 @@ struct Iterator_particles {
     using reference = value_type;
     using size_type = std::size_t;
 
+    // std::forward_iterator requires semiregular (default-constructible)
+    Iterator_particles() = default;
     explicit Iterator_particles(Storage* storage, size_type index)
         : storage_(storage), i(index) {}
 
-    // dereference
-    auto operator*() { return storage_->view(i); }
+    // dereference (const: the iterator concepts require *i on a const iterator)
+    auto operator*() const { return storage_->view(i); }
     auto operator[](difference_type n) const { return storage_->view(i + n); }
 
     // increment / decrement
